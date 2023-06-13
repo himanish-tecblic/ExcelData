@@ -16,7 +16,7 @@ class UploadView(APIView):
         field_names = [field.name for field in model_fields if field.concrete]
         
         print("------>>>>>field_names :: ",field_names)
-        excel_file = 'app/Data.xlsx' 
+        excel_file = 'app/randomData.xlsx' 
         
         df = pd.read_excel(excel_file)
         column_names = df.columns.tolist()
@@ -29,13 +29,14 @@ class UploadView(APIView):
         # excel_file = request.FILES['Data.csv']
         # print(excel_file)
         if column_names == a:
-
+            print(df.to_json())
             serializer = YourModelSerializer(data=df.to_dict(orient='records'), many=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             response = {
                 "message" : "ALL DATA HAS BEEN UPLOADED IN DATA BASE"
             }
+
             return Response(response, status=status.HTTP_200_OK)
 
         else:
